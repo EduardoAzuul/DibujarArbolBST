@@ -12,14 +12,16 @@ lista_in_orden = abb.inorden(abb.raiz)
 lista_niveles =[]
 valores_nodos=[]
 cantidad_nodo= len(lista_in_orden)
+lista_padres=[]
 
 
 
 for v in lista_in_orden:
-
+    aux_padre=v.padre
     nodo_aux= v
     lista_niveles.append(profundidad(nodo_aux))
     valores_nodos.append( nodo_aux.valor)
+    print(aux_padre)
 
 maximo_nivel = max(lista_niveles)+1
 numero_nodos = len(lista_in_orden)
