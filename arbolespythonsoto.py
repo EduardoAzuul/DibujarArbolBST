@@ -165,13 +165,13 @@ def dfs(nodo,n):
   return lista
 
 def dfsno(nodo):
-lista=[]
+  lista=[]
   lista.append(nodo)
   if nodo.izq:
-    lista.extend(dfs(nodo.izq,n))
+    lista.extend(dfs(nodo.izq))
     lista.append(nodo)
   if nodo.der:
-    lista.extend(dfs(nodo.der,n))
+    lista.extend(dfs(nodo.der))
     lista.append(nodo)
   return lista
 
