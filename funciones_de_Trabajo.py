@@ -119,3 +119,16 @@ class BST:
           if not actual.der:
             return None
           actual = actual.der
+
+
+A=Nodo("A")
+B=Nodo("B")
+C=Nodo("C")
+D=Nodo("D")
+E=Nodo("E")
+F=Nodo("F")
+G=Nodo("G")
+H=Nodo("H")
+I=Nodo("I")
+
+
