@@ -13,12 +13,13 @@ class Nodo:
     return r
   def __repr__(self):
     return f"Nodo {self.valor}"
+
   
-  def mayor(self, nodo):
+def mayor(self, nodo):
     while nodo.der:  # Recorre a la derecha mientras haya nodos
         nodo = nodo.der
-    return nodo
-  
+    return nodo  
+
 def limpiar(nodo):
   nodo.valor= None
   nodo.der= None
@@ -41,8 +42,8 @@ def eliminar_nodo(nodo):
       nodo.valor=None
     
     if(nodo.izq and nodo.der):
-      nodo= mayor(nodo.izq)
-      nodo.valor=None
+      nodo.valor= mayor(nodo.izq).valor
+      limpiar(mayor(nodo.izq))
 
 
 def profundidad(nodo): #Si se puede evitar la recursividad, mejor

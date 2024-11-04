@@ -2,6 +2,7 @@ from funciones_de_Trabajo import *
 import pygame
 import sys
 
+
 l = [45, 25, 67, 12, 32, 50, 90, 27, 35, 45, 60, 80, 99, 2, 4]
 
 abb = BST()
