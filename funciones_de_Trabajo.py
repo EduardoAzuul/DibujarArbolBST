@@ -61,6 +61,11 @@ def altura(nodo):
     return profizq
   return profder
 
+def menor(nodo):
+      while nodo.izq:  # Recorre a la izquierda mientras haya nodos
+          nodo = nodo.izq
+      return nodo
+
 '''Este es el árbol que lo acomoda (se supone que esta probado)'''
 class BST:
   def __init__(self):
@@ -130,48 +135,62 @@ class BST:
             return None
           actual = actual.der
 
+  def eliminar_nodo(self,nodo):
 
-A=Nodo("A")
-B=Nodo("B")
-C=Nodo("C")
-D=Nodo("D")
-E=Nodo("E")
-F=Nodo("F")
-G=Nodo("G")
-H=Nodo("H")
-I=Nodo("I")
-
-
-def limpiar(nodo):
-  nodo.valor= None
-  nodo.der= None
-  nodo.izq=None
-  nodo.padre=None
-
-def inorden(self, nodo):
-    l=[]
-    if nodo.izq : l.extend(self.inorden(nodo.izq))
-    l.append(nodo)
-    if nodo.der : l.extend(self.inorden(nodo.der))
-    return l
-
-def eliminar_nodo(nodo):
-    aux=megapadre(nodo)
+    # Caso 1: Nodo hoja
+    if not nodo.izq and not nodo.der:
+      if nodo == self.raiz:
+          self.raiz = None
+      else:
+          padre = nodo.padre
+          if  padre.izq == nodo:
+            padre.izq = None
+          else:
+              padre.der = None
+          nodo.padre = None
+          return nodo
+    
     if(nodo.izq == None and nodo.der == None):
         limpiar(nodo)
 
-    if(nodo.izq and not nodo.der):
-      nodo.izq.padre=nodo.padre
-      nodo.padre.izq=nodo.izq
-      limpiar(nodo)
-      
-    if(nodo.der and not nodo.izq):
-      nodo.der.padre=nodo.padre
-      nodo.padre.der=nodo.der
-      limpiar(nodo)
+   # Caso 2: Nodo con un hijo
+    if not nodo.izq:  # Tiene hijo derecho
+       self._reemplazar_nodo(nodo, menor(nodo.der))
+       return nodo
+    elif not nodo.der:  # Tiene hijo izquierdo
+       hijo = nodo.izq
+       self._reemplazar_nodo(nodo, mayor(nodo.izq))
+       return nodo
     
-    if(nodo.izq and nodo.der):
-      nodo.valor= mayor(nodo.izq).valor
-      eliminar_nodo(mayor(nodo.izq))
+    # Caso 3: Nodo con dos hijos
+    sucesor = self.mayor(nodo.izq)  # O self.mayor(nodo.izq)
+    nodo.valor = sucesor.valor
+    return self.eliminar_nodo(sucesor)
 
-    inorden(aux)
+  def inorden(self, nodo):
+      l=[]
+      if nodo.izq : l.extend(self.inorden(nodo.izq))
+      l.append(nodo)
+      if nodo.der : l.extend(self.inorden(nodo.der))
+      return l
+
+  def _reemplazar_nodo(self, nodo, nuevo_nodo):
+          if nodo == self.raiz:
+              self.raiz = nuevo_nodo
+          else:
+              padre = nodo.padre
+              if padre.izq == nodo:
+                  padre.izq = nuevo_nodo
+              else:
+                  padre.der = nuevo_nodo
+          if nuevo_nodo:
+              nuevo_nodo.padre = nodo.padre
+          
+          limpiar(nodo)
+
+def limpiar(nodo):
+    nodo.valor= None
+    nodo.der= None
+    nodo.izq=None
+    nodo.padre=None
+

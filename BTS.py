@@ -2,30 +2,37 @@ from funciones_de_Trabajo import *
 import pygame
 import sys
 
+def actualizar_listas(arbol):
+    """Función para actualizar las listas después de modificar el árbol"""
+    lista_in_orden = arbol.inorden(arbol.raiz)
+    print(lista_in_orden)
+    lista_niveles = []
+    valores_nodos = []
+    
+    lista_padres = []
+    
+    for v in lista_in_orden:
+        lista_niveles.append(profundidad(v))
+        valores_nodos.append(v.valor)
+        if v.padre:
+            lista_padres.append(v.padre.valor)
+        else:
+            lista_padres.append(None)
 
+    print(valores_nodos)     
+    maximo_nivel = max(lista_niveles) + 1 if lista_niveles else 1
+    numero_nodos = len(lista_in_orden)
+    
+    return lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos
+
+# Inicialización del árbol
 l = [45, 25, 67, 12, 32, 50, 90, 27, 35, 45, 60, 80, 99, 2, 4]
-
 abb = BST()
 for v in l:
     abb.insertar(v)
 
-# Obtener recorrido inorden
-lista_in_orden = abb.inorden(abb.raiz)
-lista_niveles = []
-valores_nodos = []
-lista_padres = []
-
-# Recolectar información de los nodos
-for v in lista_in_orden:
-    lista_niveles.append(profundidad(v))
-    valores_nodos.append(v.valor)
-    if v.padre:
-        lista_padres.append(v.padre.valor)
-    else:
-        lista_padres.append(None)
-
-maximo_nivel = max(lista_niveles) + 1
-numero_nodos = len(lista_in_orden)
+# Obtener información inicial del árbol
+lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos = actualizar_listas(abb)
 
 # Inicialización de Pygame
 pygame.init()
@@ -34,8 +41,12 @@ sscreen = (wscreen, hscreen)
 pantalla = pygame.display.set_mode(sscreen, pygame.DOUBLEBUF)
 pygame.display.set_caption("Visualización Árbol Binario")
 
-def dibujar(numNodos, numNiveles, listaOrdenada, lista_niveles):
+def dibujar(numNodos, numNiveles, listaOrdenada, lista_niveles, valores_nodos):
     pantalla.fill((255, 255, 255))  # Fondo blanco
+    if numNodos == 0:  # Si no hay nodos, no dibujamos nada
+        pygame.display.update()
+        return
+        
     wrect = wscreen / (numNodos + 1)  # Ajuste para mejor distribución
     hrect = hscreen / numNiveles
 
@@ -60,13 +71,28 @@ def dibujar(numNodos, numNiveles, listaOrdenada, lista_niveles):
 
 # Loop principal
 running = True
+mostrar_original = True
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles)
-    pygame.time.wait(100)  # Pequeña pausa para reducir uso de CPU
+    if mostrar_original:
+        # Mostrar árbol original
+        dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles, valores_nodos)
+        pygame.time.wait(2000)
+        
+        # Eliminar nodo y actualizar información
+        nodo_a_eliminar = abb.buscar(12)
+        if nodo_a_eliminar:
+            abb.eliminar_nodo(nodo_a_eliminar)
+            # Actualizar todas las listas después de la eliminación
+            lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos = actualizar_listas(abb)
+        mostrar_original = False
+    else:
+        dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles, valores_nodos)
+        pygame.time.wait(200)
 
 pygame.quit()
 sys.exit()
