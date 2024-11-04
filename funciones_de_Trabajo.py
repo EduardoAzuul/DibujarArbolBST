@@ -13,6 +13,37 @@ class Nodo:
     return r
   def __repr__(self):
     return f"Nodo {self.valor}"
+  
+  def mayor(self, nodo):
+    while nodo.der:  # Recorre a la derecha mientras haya nodos
+        nodo = nodo.der
+    return nodo
+  
+def limpiar(nodo):
+  nodo.valor= None
+  nodo.der= None
+  nodo.izq=None
+  nodo.padre=None
+
+def eliminar_nodo(nodo):
+    if(nodo.izq == None and nodo.der == None):
+        nodo.valor= None
+        if(nodo.padre.izq== nodo):
+            nodo.padre.izq = None
+        else:
+            nodo.padre.der= None
+    if(nodo.izq and not nodo.der):
+      nodo.izq.padre=nodo.padre
+      nodo.valor=None
+
+    if(nodo.der and not nodo.izq):
+      nodo.der.padre=nodo.padre
+      nodo.valor=None
+    
+    if(nodo.izq and nodo.der):
+      nodo= mayor(nodo.izq)
+      nodo.valor=None
+
 
 def profundidad(nodo): #Si se puede evitar la recursividad, mejor
   explorador = nodo
