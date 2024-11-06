@@ -140,6 +140,8 @@ class BST:
           return None
   
   def eliminar_nodo(self,nodo):
+    if nodo== None:
+       return 0
 
     # Caso 1: Nodo hoja
     if not nodo.izq and not nodo.der:
