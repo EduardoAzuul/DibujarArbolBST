@@ -84,7 +84,7 @@ while running:
         pygame.time.wait(2000)
         
         # Eliminar nodo y actualizar información
-        nodo_a_eliminar = abb.buscar(67)
+        nodo_a_eliminar = abb.buscar(2)
         if nodo_a_eliminar:
             abb.eliminar_nodo(nodo_a_eliminar)
             # Actualizar todas las listas después de la eliminación
