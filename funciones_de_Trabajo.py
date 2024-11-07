@@ -138,9 +138,9 @@ class BST:
   def rango(self,valormin,valormax):
     lista_in_orden = self.inorden(self.raiz)
     lista_rango=[]
-    for valor_nodo in lista_in_orden:
-       if valor_nodo>=valormin and valor_nodo<=valormax:
-          lista_rango.append(valor_nodo)
+    for nodo in lista_in_orden:
+       if nodo.valor>=valormin and nodo.valor<=valormax:
+          lista_rango.append(nodo)
     return lista_rango
 
   def eliminar(self, valor):  # Añadido método eliminar al BST
@@ -153,7 +153,6 @@ class BST:
   def rotar(self,nodo):
      if nodo == self.raiz:  #si es raiz sale de la funcion
         return None 
-     
      padre=nodo.padre
 
      if padre.der==nodo:  #si es el nodo de la derecha
@@ -161,7 +160,7 @@ class BST:
           if (padre.padre): #si tiene abuelo
             abuelo=padre.padre
             nodo.padre= abuelo
-            if(abuelo.der == padre)  #si es el nodo de la derecha del abuelo
+            if(abuelo.der == padre):  #si es el nodo de la derecha del abuelo
                 abuelo.der= nodo
             else:
                 abuelo.izq=nodo  
@@ -174,7 +173,7 @@ class BST:
           if (padre.padre): #si tiene abuelo
             abuelo=padre.padre
             nodo.padre= abuelo
-            if(abuelo.der == padre)  #si es el nodo de la derecha del abuelo
+            if(abuelo.der == padre):  #si es el nodo de la derecha del abuelo
                 abuelo.der= nodo
             else:
                 abuelo.izq=nodo  
