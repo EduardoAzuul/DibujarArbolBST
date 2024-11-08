@@ -135,66 +135,13 @@ class BST:
             return None
           actual = actual.der
 
-  def rango(self,valormin,valormax):
-    lista_in_orden = self.inorden(self.raiz)
-    lista_rango=[]
-    for valor_nodo in lista_in_orden:
-       if valor_nodo>=valormin and valor_nodo<=valormax:
-          lista_rango.append(valor_nodo)
-    return lista_rango
-
   def eliminar(self, valor):  # Añadido método eliminar al BST
           nodo = self.buscar(valor)
           if nodo:
               self.eliminar_nodo(nodo)
           return None
   
-  ##############################
-  def rotar(self,nodo):
-     if nodo == self.raiz:  #si es raiz sale de la funcion
-        return None 
-     
-     padre=nodo.padre
-
-     if padre.der==nodo:  #si es el nodo de la derecha
-        if nodo.izq:
-          if (padre.padre): #si tiene abuelo
-            abuelo=padre.padre
-            nodo.padre= abuelo
-            if(abuelo.der == padre)  #si es el nodo de la derecha del abuelo
-                abuelo.der= nodo
-            else:
-                abuelo.izq=nodo  
-                  
-          padre.der=nodo.izq
-          if nodo.izq:
-            nodo.izq.padre=padre
-            nodo.izq=padre
-        if nodo.der:
-          if (padre.padre): #si tiene abuelo
-            abuelo=padre.padre
-            nodo.padre= abuelo
-            if(abuelo.der == padre)  #si es el nodo de la derecha del abuelo
-                abuelo.der= nodo
-            else:
-                abuelo.izq=nodo  
-                  
-          padre.izq=nodo.der
-          if(nodo.der):
-            nodo.der.padre=padre
-            nodo.der=padre
-          
-
-
-     if padre== self.raiz:  #si es el nodo raiz
-        self.raiz=nodo
-    
-
-
-
   def eliminar_nodo(self,nodo):
-    if nodo== None:
-       return 0
 
     # Caso 1: Nodo hoja
     if not nodo.izq and not nodo.der:

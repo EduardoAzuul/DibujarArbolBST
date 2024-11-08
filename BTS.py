@@ -1,6 +1,7 @@
 from funciones_de_Trabajo import *
 import pygame
 import sys
+import math
 
 def actualizar_listas(arbol):
     """Función para actualizar las listas después de modificar el árbol"""
@@ -26,7 +27,7 @@ def actualizar_listas(arbol):
     return lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos
 
 # Inicialización del árbol
-l = [45, 25, 67, 12, 32, 50, 90, 27, 35, 45, 60, 80, 99, 2, 4]
+l = [45, 25, 67, 12, 32, 50,100,30, 90, 27, 35, 45, 60, 80, 99, 2, 4]
 abb = BST()
 for v in l:
     abb.insertar(v)
@@ -47,25 +48,29 @@ def dibujar(numNodos, numNiveles, listaOrdenada, lista_niveles, valores_nodos):
         pygame.display.update()
         return
         
-    wrect = wscreen / (numNodos + 1)  # Ajuste para mejor distribución
-    hrect = hscreen / numNiveles
+    wrect = wscreen / (numNodos+1)  # Ajuste para mejor distribución
+    hrect = hscreen / (numNiveles+1)
 
-    # Dibujar conexiones
-    for i in range(len(listaOrdenada) - 1):
-        start_pos = (wscreen - ((wrect) * (i + 1)), ((hrect) * (lista_niveles[i] + 1)))
-        end_pos = (wscreen - ((wrect) * (i + 2)), (hrect * (lista_niveles[i + 1] + 1)))
-        pygame.draw.line(pantalla, (100, 100, 100), start_pos, end_pos, 2)
-
-    # Dibujar nodos
     for i in range(len(listaOrdenada)):
-        pos = (wscreen - ((wrect) * (i + 1)), ((hrect) * (lista_niveles[i] + 1)))
-        pygame.draw.circle(pantalla, (100, 50, 50), pos, 20)
-        
+        pos = (((wrect) * (i + 1)), ((hrect) * (lista_niveles[i] + 1)))
+        pygame.draw.circle(pantalla, (100, 50, 50), pos, wrect/1.2)
+        lista_in_orden[i].x=(i + 1)
+        lista_in_orden[i].y=lista_niveles[i] + 1
         # Añadir valores de los nodos
         font = pygame.font.Font(None, 24)
         text = font.render(str(valores_nodos[i]), True, (255, 255, 255))
         text_rect = text.get_rect(center=pos)
         pantalla.blit(text, text_rect)
+
+    # Dibujar conexiones
+    for i in range(len(listaOrdenada) ):
+        if lista_in_orden[i].padre:
+            start_pos = ( ((wrect) * lista_in_orden[i].padre.x), ((hrect) * lista_in_orden[i].padre.y))
+            end_pos = ( ((wrect) * lista_in_orden[i].x), (hrect * lista_in_orden[i].y))
+            pygame.draw.line(pantalla, (100, 100, 100), start_pos, end_pos, 2)
+
+    # Dibujar nodos
+
 
     pygame.display.update()
 
@@ -77,6 +82,23 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            posMouse = pygame.mouse.get_pos()
+            wrect = wscreen / (numero_nodos+1)  # Ajuste para mejor distribución
+            hrect = hscreen / (maximo_nivel+1)
+            x_alt=round(posMouse[0]/wrect)
+            y_alt=round(posMouse[1]/hrect)
+            print("x1:",x_alt)
+            print("y1:",y_alt)
+            for i in lista_in_orden:
+                print("x:",i.x)
+                print("y:",i.y)
+                if i.x==x_alt :
+                    print("Nodo seleccionado:",i.valor)
+                    abb.eliminar_nodo(i)
+                    break           
+            lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos = actualizar_listas(abb)
+            mostrar_original = False
 
     if mostrar_original:
         # Mostrar árbol original
@@ -84,12 +106,7 @@ while running:
         pygame.time.wait(2000)
         
         # Eliminar nodo y actualizar información
-        nodo_a_eliminar = abb.buscar(2)
-        if nodo_a_eliminar:
-            abb.eliminar_nodo(nodo_a_eliminar)
-            # Actualizar todas las listas después de la eliminación
-            lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos = actualizar_listas(abb)
-        mostrar_original = False
+    
     else:
         dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles, valores_nodos)
         pygame.time.wait(200)
