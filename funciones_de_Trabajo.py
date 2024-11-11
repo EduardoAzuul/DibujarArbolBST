@@ -17,7 +17,7 @@ class Nodo:
     return f"Nodo {self.valor}"
   
 
-  
+   
 def mayor(nodo):
     while nodo.der:  # Recorre a la derecha mientras haya nodos
         nodo = nodo.der
