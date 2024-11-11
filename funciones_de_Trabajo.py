@@ -109,6 +109,9 @@ class BST:
     if nodo.izq : l.extend(self.inorden(nodo.izq))
     l.append(nodo)
     if nodo.der : l.extend(self.inorden(nodo.der))
+    for i in range (len(l)) :
+       l[i].y=profundidad(i)
+       l[i].x=i
     return l
 
   def mayor(self, nodo):
@@ -149,45 +152,65 @@ class BST:
               self.eliminar_nodo(nodo)
           return None
   
-  ##############################
-  def rotar(self,nodo):
-     if nodo == self.raiz:  #si es raiz sale de la funcion
-        return None 
+
+###################################
+  def rotar(self, nodo):
+    if nodo ==self.raiz:
+       return None
+
+    padre = nodo.padre
+    abuelo = padre.padre
+
+    if not padre:  # Verificación adicional de seguridad
+        return None
+
+    
+    # Si el padre es raíz
+    if padre == self.raiz:
+        self.raiz = nodo
+        nodo.padre = None
+
+        
+    else:     #le asignamos el hijo correspondiente al abuelo
+        if abuelo:
+          nodo.padre = abuelo
+          if abuelo.izq == padre:
+              abuelo.izq = nodo
+          else:
+              abuelo.der = nodo
+
+
+    #Si fue en el nodo derecho
+    if padre.der == nodo:
+
+        # El nodo adopta a su padre como hijo izquierdo
+        nodo.izq = padre
+        padre.padre = nodo
+        
+        
+        # El antiguo subárbol izquierdo del nodo se convierte en subárbol derecho del padre
+        aux = nodo.izq  #aux es el subarbol
+        padre.der = aux
+        if aux: #si hay un subarbol
+            padre.der = aux
+            aux.padre = padre
+
+    # Rotación cuando el nodo es hijo izquierdo
+    elif padre.izq == nodo:
+        # Guardamos el subárbol
+        axu = nodo.der
+        
+        # El nodo adopta a su padre como hijo derecho
+        nodo.der = padre
+        padre.padre = nodo
+        
+        # El antiguo subárbol derecho del nodo se convierte en subárbol izquierdo del padre
+        padre.izq = aux
+        if aux:
+            aux.padre = padre
+
+    return None
      
-     padre=nodo.padre
-
-     if padre.der==nodo:  #si es el nodo de la derecha
-        if nodo.izq:
-          if (padre.padre): #si tiene abuelo
-            abuelo=padre.padre
-            nodo.padre= abuelo
-            if(abuelo.der == padre)  #si es el nodo de la derecha del abuelo
-                abuelo.der= nodo
-            else:
-                abuelo.izq=nodo  
-                  
-          padre.der=nodo.izq
-          if nodo.izq:
-            nodo.izq.padre=padre
-            nodo.izq=padre
-        if nodo.der:
-          if (padre.padre): #si tiene abuelo
-            abuelo=padre.padre
-            nodo.padre= abuelo
-            if(abuelo.der == padre)  #si es el nodo de la derecha del abuelo
-                abuelo.der= nodo
-            else:
-                abuelo.izq=nodo  
-                  
-          padre.izq=nodo.der
-          if(nodo.der):
-            nodo.der.padre=padre
-            nodo.der=padre
-          
-
-
-     if padre== self.raiz:  #si es el nodo raiz
-        self.raiz=nodo
     
 
 
