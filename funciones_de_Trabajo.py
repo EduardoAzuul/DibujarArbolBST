@@ -157,6 +157,9 @@ class BST:
   def rotar(self, nodo):
     if nodo ==self.raiz:
        return None
+    
+    if nodo.der:
+      auxder=nodo.der
 
     padre = nodo.padre
     abuelo = padre.padre
@@ -179,6 +182,9 @@ class BST:
           else:
               abuelo.der = nodo
 
+    # El antiguo subárbol izquierdo del nodo se convierte en subárbol derecho del padre
+        aux = nodo.izq  #aux es el subarbol
+        padre.der = aux
 
     #Si fue en el nodo derecho
     if padre.der == nodo:
@@ -188,9 +194,7 @@ class BST:
         padre.padre = nodo
         
         
-        # El antiguo subárbol izquierdo del nodo se convierte en subárbol derecho del padre
-        aux = nodo.izq  #aux es el subarbol
-        padre.der = aux
+        
         if aux: #si hay un subarbol
             padre.der = aux
             aux.padre = padre
@@ -209,6 +213,7 @@ class BST:
         if aux:
             aux.padre = padre
 
+    nodo.der
     return None
      
     
