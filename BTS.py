@@ -204,7 +204,9 @@ while running:
                     input_rect.w = max(140, text_surface.get_width() + 10)
                         
                     pygame.display.update()
-                
+            if event.key==pygame.K_b:   
+                busqueda=abb.buscar(100) 
+                print("busc:",busqueda)
 
 
 

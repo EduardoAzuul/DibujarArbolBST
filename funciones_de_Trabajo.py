@@ -122,18 +122,21 @@ class BST:
       return nodo
 
   def buscar(self, valor):
+      regresar=[self.raiz]
       actual = self.raiz
       while True:
         if actual.valor == valor:
-          return actual  # No insertamos duplicados
+          return regresar  # No insertamos duplicados
         elif valor < actual.valor:  # Vamos a la izquierda
           if not actual.izq:
             return None
           actual = actual.izq
+          regresar.append(actual)
         else:  # Vamos a la derecha
           if not actual.der:
             return None
           actual = actual.der
+          regresar.append(actual)
 
   def rango(self,valormin,valormax):
     lista_in_orden = self.inorden(self.raiz)
