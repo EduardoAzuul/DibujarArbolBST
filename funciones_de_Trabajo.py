@@ -17,7 +17,7 @@ class Nodo:
     return f"Nodo {self.valor}"
   
 
-  
+   
 def mayor(nodo):
     while nodo.der:  # Recorre a la derecha mientras haya nodos
         nodo = nodo.der
@@ -125,25 +125,28 @@ class BST:
       return nodo
 
   def buscar(self, valor):
+      regresar=[self.raiz]
       actual = self.raiz
       while True:
         if actual.valor == valor:
-          return actual  # No insertamos duplicados
+          return regresar  # No insertamos duplicados
         elif valor < actual.valor:  # Vamos a la izquierda
           if not actual.izq:
             return None
           actual = actual.izq
+          regresar.append(actual)
         else:  # Vamos a la derecha
           if not actual.der:
             return None
           actual = actual.der
+          regresar.append(actual)
 
   def rango(self,valormin,valormax):
     lista_in_orden = self.inorden(self.raiz)
     lista_rango=[]
-    for valor_nodo in lista_in_orden:
-       if valor_nodo>=valormin and valor_nodo<=valormax:
-          lista_rango.append(valor_nodo)
+    for nodo in lista_in_orden:
+       if nodo.valor>=valormin and nodo.valor<=valormax:
+          lista_rango.append(nodo)
     return lista_rango
 
   def eliminar(self, valor):  # Añadido método eliminar al BST
@@ -221,8 +224,6 @@ class BST:
 
 
   def eliminar_nodo(self,nodo):
-    if nodo== None:
-       return 0
 
     # Caso 1: Nodo hoja
     if not nodo.izq and not nodo.der:
