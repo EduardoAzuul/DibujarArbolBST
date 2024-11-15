@@ -105,19 +105,33 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+
+            ####CLICKKKK
+        left=1
+        right=3
         if event.type == pygame.MOUSEBUTTONUP:
             posMouse = pygame.mouse.get_pos()
-            wrect = wscreen / (numero_nodos+1)  # Ajuste para mejor distribución
+            wrect = wscreen / (numero_nodos+1)
             hrect = hscreen / (maximo_nivel+1)
-            x_alt=round(posMouse[0]/wrect)
-            y_alt=round(posMouse[1]/hrect)
-            for i in lista_in_orden:
+            x_alt = round(posMouse[0]/wrect)
+            y_alt = round(posMouse[1]/hrect)
 
-                if i.x==x_alt :
-                    abb.eliminar_nodo(i)
-                    break           
+            if(event.button==left):
+                for i in lista_in_orden:
+                    if i.x == x_alt:
+                        abb.eliminar_nodo(i)
+                        break 
+            elif(event.button==right):
+                for i in lista_in_orden:
+                    if i.x == x_alt:
+                        abb.rotar(i)
+                        break 
             lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos = actualizar_listas(abb)
-            mostrar_original = False
+            mostrar_original = True  # Mantener como True para redibujar
+            # Forzar el redibujo inmediatamente
+            dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles, valores_nodos)
+
 
         if event.type == pygame.KEYUP:
             if event.key==pygame.K_r:
@@ -214,7 +228,7 @@ while running:
         # Mostrar árbol original
         
         dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles, valores_nodos)
-        pygame.time.wait(2000)
+        pygame.time.wait(500)
 
 
 pygame.quit()

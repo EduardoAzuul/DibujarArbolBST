@@ -155,153 +155,132 @@ class BST:
               self.eliminar_nodo(nodo)
           return None
   
+###################################################################################
 
-###################################
   def rotar(self, nodo):
-    if nodo ==self.raiz:
-       return None
-    
-    if nodo.der:
-      auxder=nodo.der
-
-    padre = nodo.padre
-    abuelo = padre.padre
-
-    if not padre:  # Verificación adicional de seguridad
-        return None
-
-    
-    # Si el padre es raíz
-    if padre == self.raiz:
-        self.raiz = nodo
-        nodo.padre = None
-
-        
-    else:     #le asignamos el hijo correspondiente al abuelo
-        if abuelo:
+      if nodo is None or nodo.padre is None:
+          return None
+      
+      #almacemaineto de nodos para que no se pierdan
+      padre = nodo.padre
+      abuelo = padre.padre
+      nodo_izq = nodo.izq
+      nodo_der = nodo.der
+      
+      # Encargate dle abuelo
+      if padre == self.raiz:
+          self.raiz = nodo
+          nodo.padre = None
+      else:
           nodo.padre = abuelo
           if abuelo.izq == padre:
               abuelo.izq = nodo
           else:
               abuelo.der = nodo
+      
+      #si es el nodo derecho
+      if padre.der == nodo:
+          # el nodo volvera a su padre su nodo izq, y le asignara su nodo izq a la derehca
+          nodo.izq = padre
+          padre.padre = nodo
+          
+          padre.der = nodo_izq
+          if nodo_izq:
+              nodo_izq.padre = padre
+              
+      # si es el nodo izq
+      elif padre.izq == nodo:
+          # el nodo volvera a su padre su nodo der, y le asignara su nodo der a la izq
+          nodo.der = padre
+          padre.padre = nodo
+          
+          padre.izq = nodo_der
+          if nodo_der:
+              nodo_der.padre = padre
+              
+      return nodo
 
-    # El antiguo subárbol izquierdo del nodo se convierte en subárbol derecho del padre
-        aux = nodo.izq  #aux es el subarbol
-        padre.der = aux
-
-    #Si fue en el nodo derecho
-    if padre.der == nodo:
-
-        # El nodo adopta a su padre como hijo izquierdo
-        nodo.izq = padre
-        padre.padre = nodo
-        
-        
-        
-        if aux: #si hay un subarbol
-            padre.der = aux
-            aux.padre = padre
-
-    # Rotación cuando el nodo es hijo izquierdo
-    elif padre.izq == nodo:
-        # Guardamos el subárbol
-        axu = nodo.der
-        
-        # El nodo adopta a su padre como hijo derecho
-        nodo.der = padre
-        padre.padre = nodo
-        
-        # El antiguo subárbol derecho del nodo se convierte en subárbol izquierdo del padre
-        padre.izq = aux
-        if aux:
-            aux.padre = padre
-
-    nodo.der
-    return None
-     
-    
-
-
+###################################################################################################################
 
   def eliminar_nodo(self,nodo):
 
-    # Caso 1: Nodo hoja
-    if not nodo.izq and not nodo.der:
-      if nodo == nodo.padre:
-          self.raiz = None
-      else:
-          padre = nodo.padre
-          if padre.izq == nodo:
-              padre.izq = None
-          else:
-              padre.der = None
-          nodo.padre = None
+      # Caso 1: Nodo hoja
+      if not nodo.izq and not nodo.der:
+        if nodo == nodo.padre:
+            self.raiz = None
+        else:
+            padre = nodo.padre
+            if padre.izq == nodo:
+                padre.izq = None
+            else:
+                padre.der = None
+            nodo.padre = None
 
-   # Caso 2: Nodo con un hijo
-    elif nodo.izq and not nodo.der:
-      if nodo == self.raiz:
-          self.raiz = nodo.izq
-          nodo.izq.padre = None
-      else:
-          padre = nodo.padre
-          if padre.izq == nodo:
-              padre.izq = nodo.izq
-          else:
-              padre.der = nodo.izq
-          nodo.izq.padre = padre
-    
-    elif nodo.der and not nodo.izq:
-      if nodo == self.raiz:
-          self.raiz = nodo.der
-          nodo.der.padre = None
-      else:
-          padre = nodo.padre
-          if padre.izq == nodo:
-              padre.izq = nodo.der
-          else:
-              padre.der = nodo.der
-          nodo.der.padre = padre
+    # Caso 2: Nodo con un hijo
+      elif nodo.izq and not nodo.der:
+        if nodo == self.raiz:
+            self.raiz = nodo.izq
+            nodo.izq.padre = None
+        else:
+            padre = nodo.padre
+            if padre.izq == nodo:
+                padre.izq = nodo.izq
+            else:
+                padre.der = nodo.izq
+            nodo.izq.padre = padre
+      
+      elif nodo.der and not nodo.izq:
+        if nodo == self.raiz:
+            self.raiz = nodo.der
+            nodo.der.padre = None
+        else:
+            padre = nodo.padre
+            if padre.izq == nodo:
+                padre.izq = nodo.der
+            else:
+                padre.der = nodo.der
+            nodo.der.padre = padre
 
-    # Caso 3: Nodo con dos hijos
-    else:
-      sucesor = self.mayor(nodo.izq)
-      nodo.valor = sucesor.valor
-      self.eliminar_nodo(sucesor)
-      print(sucesor)
+      # Caso 3: Nodo con dos hijos
+      else:
+        sucesor = self.mayor(nodo.izq)
+        nodo.valor = sucesor.valor
+        self.eliminar_nodo(sucesor)
+        print(sucesor)
 
   def inorden(self, nodo):
-      l=[]
-      if nodo.izq : l.extend(self.inorden(nodo.izq))
-      l.append(nodo)
-      if nodo.der : l.extend(self.inorden(nodo.der))
-      return l
+        l=[]
+        if nodo.izq : l.extend(self.inorden(nodo.izq))
+        l.append(nodo)
+        if nodo.der : l.extend(self.inorden(nodo.der))
+        return l
 
-def _reemplazar_nodo(self, nodo, nuevo_nodo):
-    
-    if nodo.padre == None:  # Es la raíz
-        self.raiz = nuevo_nodo
-        nuevo_nodo.padre = None
-    else:
-        padre = nodo.padre
-        if padre.izq == nodo:
-            padre.izq = nuevo_nodo
-        else:
-            padre.der = nuevo_nodo
-        if nuevo_nodo:
-            nuevo_nodo.padre = padre
-    
-    if nodo.der:
-       nuevo_nodo.der=nodo.der
-       nodo.der.padre=nuevo_nodo
+  def _reemplazar_nodo(self, nodo, nuevo_nodo):
+      
+      if nodo.padre == None:  # Es la raíz
+          self.raiz = nuevo_nodo
+          nuevo_nodo.padre = None
+      else:
+          padre = nodo.padre
+          if padre.izq == nodo:
+              padre.izq = nuevo_nodo
+          else:
+              padre.der = nuevo_nodo
+          if nuevo_nodo:
+              nuevo_nodo.padre = padre
+      
+      if nodo.der:
+        nuevo_nodo.der=nodo.der
+        nodo.der.padre=nuevo_nodo
 
-    if nodo.izq:
-       nuevo_nodo.der=nodo.izq
-       nodo.izq.padre=nuevo_nodo
-    
-    limpiar(nodo)  # Limpiamos el nodo original, no el nuevo
-    nodo.valor=nuevo_nodo.valor
+      if nodo.izq:
+        nuevo_nodo.der=nodo.izq
+        nodo.izq.padre=nuevo_nodo
+      
+      limpiar(nodo)  # Limpiamos el nodo original, no el nuevo
+      nodo.valor=nuevo_nodo.valor
 
-    limpiar(nuevo_nodo)
+      limpiar(nuevo_nodo)
 
 def limpiar(nodo):
     nodo.valor= None
