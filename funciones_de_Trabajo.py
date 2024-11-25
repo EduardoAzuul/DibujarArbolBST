@@ -60,7 +60,7 @@ def altura(nodo):
   if profizq>profder:
     return profizq
   return profder
-
+ 
 def menor(nodo):
       while nodo.izq:  # Recorre a la izquierda mientras haya nodos
           nodo = nodo.izq

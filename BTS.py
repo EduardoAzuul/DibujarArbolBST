@@ -97,9 +97,13 @@ def dibujar_rango(numNodos, numNiveles,lista):
 running = True
 mostrar_original = True
 input_text = ""
+input_text_b = ""
 input_active = False  
+input_active_b = False  
 input_rect = pygame.Rect(50, 100, 200, 32)
+input_rect_b = pygame.Rect(50, 100, 200, 32)
 input_rect_erase = pygame.Rect(55, 105, 195, 25)
+input_rect_erase_b = pygame.Rect(55, 105, 195, 25)
 font = pygame.font.Font(None, 24)
 while running:
     for event in pygame.event.get():
@@ -219,8 +223,45 @@ while running:
                         
                     pygame.display.update()
             if event.key==pygame.K_b:   
-                busqueda=abb.buscar(100) 
-                print("busc:",busqueda)
+                indicaciones_b = font.render("Ingrese un numero:", True, (0,0,0))
+                pantalla.blit(indicaciones_b, (input_rect_b.x , input_rect_b.y - 50))
+
+                text_surface_b = font.render(input_text_b, True, (255,255,255))
+                pantalla.blit(text_surface_b, (input_rect_b.x + 5, input_rect_b.y + 5))
+                pygame.draw.rect(pantalla, (50, 50, 50), input_rect_b, 2)  # Dibujar el rectángulo de la caja de texto
+                input_active_b = True
+                pygame.display.update()
+                while input_active_b:
+                    for event in pygame.event.get():
+                        if event.type == pygame.KEYUP:
+                            if event.key==pygame.K_RETURN:
+                                pantalla.fill((0,0,0))
+                                dibujar(numero_nodos, maximo_nivel, lista_in_orden, lista_niveles, valores_nodos)
+
+                                input_text_b = input_text_b[:-1]
+                                input_active_b = False
+                                
+                                lista_buscada=abb.buscar(int(input_text_b))
+                                lista_in_orden, lista_niveles, valores_nodos, lista_padres, maximo_nivel, numero_nodos = actualizar_listas(abb)
+                                dibujar_rango(numero_nodos,maximo_nivel,lista_buscada)
+                                mostrar_original=False
+                                input_text_b = ""
+                        elif event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_BACKSPACE:
+                                input_text_b = input_text_b[:-1]
+                                pygame.draw.rect(pantalla, (255,255,255), input_rect_erase_b)
+                                pygame.display.update()
+                            else:
+                                input_text_b += event.unicode
+                        elif event.type == pygame.QUIT:
+                            input_active_b=False
+                            running = False
+                    
+                    text_surface_b = font.render(input_text_b, True, (0,0,0))
+                    pantalla.blit(text_surface_b, (input_rect_b.x + 5, input_rect_b.y + 5))
+                    input_rect_b.w = max(140, text_surface_b.get_width() + 10)
+                        
+                    pygame.display.update()
 
 
 
